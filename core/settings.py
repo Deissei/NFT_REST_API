@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -10,6 +9,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+
+AUTH_USER_MODEL = 'users.User'
 
 # Application definition
 
@@ -26,7 +27,9 @@ DRF_APPS = [
     'rest_framework',
 ]
 
-CONFIG_APPS = []
+CONFIG_APPS = [
+    'apps.users',
+]
 
 INSTALLED_APPS = DJANGO_APPS + DRF_APPS + CONFIG_APPS
 
