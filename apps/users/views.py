@@ -23,7 +23,7 @@ class UserAPIViewSet(viewsets.ModelViewSet):
         return UserSerializer
     
     def get_permissions(self):
-        if self.action in ('update', 'update_password'):
+        if self.action in ('update', 'update_password', 'destroy'):
             return [IsOwner()]
         return [permissions.AllowAny()]
     

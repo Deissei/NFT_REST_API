@@ -1,5 +1,8 @@
-media
 db.sqlite3
 __pycache__
 .vscode
 env
+
+media/*
+!media/default_images/
+!media/default_images/**

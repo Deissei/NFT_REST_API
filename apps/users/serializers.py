@@ -5,6 +5,8 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    avatar = serializers.ImageField(required=False)
+
     class Meta:
         model = User
         fields = (
@@ -44,6 +46,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user = User(**validated_data)
         user.set_password(password)
         user.save()
+
+        if not user.avatar:
+            user.avatar = "default_images/360_F_209370065_JLXhrc5inEmGl52SyvSPeVB23hB6IjrR.jpg"
+            user.save()
+        
         return user
 
 

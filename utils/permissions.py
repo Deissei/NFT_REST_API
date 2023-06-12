@@ -6,3 +6,4 @@ class IsOwner(permissions.BasePermission):
         if request.user.is_staff == True:
             return True
         return bool(obj.username == request.user.username)
+        
