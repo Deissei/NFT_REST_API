@@ -39,6 +39,7 @@ class User(AbstractUser):
         null=True,
         blank=True
     )
+    USERNAME_FIELD = 'username'
 
     def __str__(self):
         return self.username

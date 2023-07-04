@@ -29,6 +29,7 @@ DRF_APPS = [
 
 CONFIG_APPS = [
     'apps.users',
+    'apps.collections_nft',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + DRF_APPS + CONFIG_APPS
