@@ -8,6 +8,11 @@ class User(AbstractUser):
         blank=True,
         null=True,
     )
+    cover_image = models.ImageField(
+        upload_to='cover_image/',
+        blank=True,
+        null=True,
+    )
     description = models.TextField(
         null=True,
         blank=True,

@@ -13,6 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
             'id',
             'username',
             'avatar',
+            'cover_image',
             'display_name',
             'balance',
             'url',
@@ -92,4 +93,3 @@ class UserUpdatePasswordSerializer(serializers.ModelSerializer):
         user.set_password(new_password)
         user.save()
         return user
-
