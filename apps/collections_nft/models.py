@@ -5,6 +5,16 @@ from django.db import models
 User = get_user_model()
 
 
+class PreviousPrice(models.Model):
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    previous_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+    )
+
+
 class CollectionNFT(models.Model):
     title = models.CharField(
         max_length=256,
@@ -12,9 +22,16 @@ class CollectionNFT(models.Model):
     description = models.TextField()
     image = models.ImageField(
         upload_to='collections_nft',
+        blank=True,
+        null=True,
     )
     external_link = models.CharField(
         max_length=256,
+    )
+    previous_prices = models.ManyToManyField(
+        PreviousPrice,
+        blank=True,
+        related_name='previous_prices'
     )
     price = models.DecimalField(
         max_digits=10,

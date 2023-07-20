@@ -1,6 +1,6 @@
 from rest_framework import permissions, viewsets
 
-from apps.collections_nft.models import CollectionNFT
+from apps.collections_nft.models import CollectionNFT, PreviousPrice
 from apps.collections_nft.serializers import CollectionNFTSerializer
 from utils.permissions import IsCollectionNFTOwner
 
