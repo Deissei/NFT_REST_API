@@ -3,6 +3,20 @@ from rest_framework import serializers
 from apps.nft.models import Nft
 
 
+class NftLISTSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Nft
+        fields = (
+            'id',
+            'title',
+            'author',
+            'price',
+            'blockchain',
+            'image',
+        )
+
+
 class NftSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
 
@@ -55,3 +69,13 @@ class NftSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("No end date for auction!")
 
         return super().update(instance, validated_data)
+
+
+class NFTCOllectionSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Nft
+        fields = (
+            'id',
+            'image',
+        )

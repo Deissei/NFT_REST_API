@@ -3,6 +3,7 @@ from rest_framework import serializers
 from apps.collections_nft.models import CollectionNFT
 from apps.users.serializers import UserSerializer
 from apps.collections_nft.models import PreviousPrice
+from apps.nft.serializers import NFTCOllectionSerializer
 
 
 class PerviousPriceSerializer(serializers.ModelSerializer):
@@ -51,3 +52,16 @@ class CollectionNFTSerializer(serializers.ModelSerializer):
             instance.save()
 
         return instance
+
+
+class CollectionNftLISTSerializer(serializers.ModelSerializer):
+    nft_collections = NFTCOllectionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = CollectionNFT
+        fields = (
+            'id',
+            'owner',
+            'image',
+            'nft_collections',
+        )
