@@ -21,6 +21,8 @@ class Nft(models.Model):
     )
     image = models.ImageField(
         upload_to='nft',
+        blank=True,
+        null=True,
     )
     auction = models.BooleanField(
         default=False,

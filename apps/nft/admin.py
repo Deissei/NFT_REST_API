@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from apps.nft.models import Nft
+
+@admin.register(Nft)
+class NftAdmin(admin.ModelAdmin):
+    list_display = ('title', )
+    list_filter = ('created_at', )

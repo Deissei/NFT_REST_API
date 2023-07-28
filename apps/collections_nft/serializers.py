@@ -30,11 +30,13 @@ class CollectionNFTSerializer(serializers.ModelSerializer):
             'author',
             'owner',
             'created_at',
+            'nft_collections',
         )
         read_only_fields = (
             'author',
             'owner',
             'previous_prices',
+            'nft_collections',
         )
     
     def update(self, instance, validated_data):
