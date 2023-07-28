@@ -1,7 +1,7 @@
 from rest_framework import permissions, viewsets
 
 from apps.nft.models import Nft
-from apps.nft.serializers import NftSerializer
+from apps.nft.serializers import NftSerializer, NftLISTSerializer
 from utils.permissions import IsCollectionNFTOwner
 
 
@@ -18,3 +18,8 @@ class NftAPIViewSet(viewsets.ModelViewSet):
         user = self.request.user
         serializer.save(owner=user, author=user)
         return serializer
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return NftLISTSerializer
+        return NftSerializer
