@@ -34,10 +34,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            'id',
             'username',
             'display_name',
             'password',
             'email',
+        )
+        read_only_fields = (
+            'id',
         )
 
     def create(self, validated_data):
