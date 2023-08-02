@@ -19,6 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
             'url',
             'email',
             'description',
+            'cart_user',
             'instagram',
             'telegram',
             'facebook',
