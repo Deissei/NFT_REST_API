@@ -6,6 +6,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from apps.users.serializers import (UserCreateSerializer, UserSerializer,
                                     UserUpdatePasswordSerializer)
+from apps.cart.models import Cart
 from utils.permissions import IsOwner
 
 User = get_user_model()
@@ -36,3 +37,7 @@ class UserAPIViewSet(viewsets.ModelViewSet):
         user.set_password(new_password)
         serializer.save()
         return Response({'message': 'Password updated successfully.'})
+    
+    def perform_create(self, serializer):
+        user = serializer.save()
+        cart = Cart.objects.create(user=user)
