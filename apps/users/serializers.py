@@ -1,11 +1,15 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+from apps.transactions.serializers import TransactionSerializer
+
 User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(required=False)
+    transaction_buyer = TransactionSerializer(read_only=True, many=True)
+    transaction_seller = TransactionSerializer(read_only=True, many=True)
 
     class Meta:
         model = User
@@ -23,6 +27,8 @@ class UserSerializer(serializers.ModelSerializer):
             'instagram',
             'telegram',
             'facebook',
+            'transaction_buyer',
+            'transaction_seller',
         )
         read_only_fields = (
             'id',
