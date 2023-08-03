@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 from apps.nft.models import Nft
+from apps.collections_nft.models import CollectionNFT
 
 User = get_user_model()
 
@@ -20,6 +21,15 @@ class Transaction(models.Model):
         Nft,
         on_delete=models.CASCADE,
         related_name="transaction_nft",
+        null=True,
+        blank=True,
+    )
+    collection_nft_id = models.ForeignKey(
+        CollectionNFT,
+        on_delete=models.CASCADE,
+        related_name="transaction_collections",
+        null=True,
+        blank=True,
     )
     buyer_id = models.ForeignKey(
         User,

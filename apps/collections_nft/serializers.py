@@ -61,6 +61,7 @@ class CollectionNftLISTSerializer(serializers.ModelSerializer):
         model = CollectionNFT
         fields = (
             'id',
+            'title',
             'owner',
             'image',
             'nft_collections',
