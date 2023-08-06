@@ -7,6 +7,25 @@ from apps.collections_nft.models import CollectionNFT
 User = get_user_model()
 
 
+class NftAuction(models.Model):
+    user_id = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="nft_auction_user",
+    )
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=1,
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    
+    class Meta:
+        ordering = ['-created_at']
+
+
 class Nft(models.Model):
     BLOCKCHAIN_CHOICES = [
         ("ETH", "Ethereum"),
@@ -31,6 +50,11 @@ class Nft(models.Model):
         null=True,
         blank=True,
     )
+    auction_prices = models.ManyToManyField(
+        NftAuction,
+        related_name="nft_action_price",
+        blank=True
+    )
 
     external_link = models.CharField(
         max_length=256,
@@ -54,7 +78,7 @@ class Nft(models.Model):
     )
     supply = models.IntegerField(
         validators=[
-            MinValueValidator(0),
+            MinValueValidator(1),
         ]        
     )
 

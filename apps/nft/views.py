@@ -4,10 +4,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.validators import ValidationError
 
-from apps.nft.models import Nft
-from apps.nft.serializers import NftLISTSerializer, NftSerializer
+from apps.nft.models import Nft, NftAuction
+from apps.nft.serializers import (AuctionPriceSerializer, NftLISTSerializer,
+                                  NftSerializer)
 from apps.transactions.models import Transaction
-
 from utils.filters import NftPriceFilter
 from utils.permissions import IsCollectionNFTOwner
 
@@ -18,11 +18,11 @@ class NftAPIViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ("title", "author__username", "collection_id__title")
     filterset_class = NftPriceFilter
-
+    
     def get_permissions(self):
         if self.action in ('update', 'destroy'):
             return [IsCollectionNFTOwner()]
-        if self.action in ('purchase', ):
+        if self.action in ('purchase', 'add_price_auction'):
             return [permissions.IsAuthenticated()]
         return [permissions.IsAuthenticatedOrReadOnly()]
 
@@ -34,6 +34,8 @@ class NftAPIViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return NftLISTSerializer
+        if self.action == 'add_price_auction':
+            return AuctionPriceSerializer
         return NftSerializer
     
     @action(detail=True, methods=['post'])
@@ -66,3 +68,37 @@ class NftAPIViewSet(viewsets.ModelViewSet):
         transaction_check_buyer.save()  
         
         return Response({'message': "Покупка прошла успешно"})
+    
+    @action(methods=['post'], detail=True)
+    def add_price_auction(self, request, pk=None):
+        nft = self.get_object()
+        user = request.user
+        
+        price = request.data.get('price')
+        
+        serializer = AuctionPriceSerializer(data={'price': price})
+        serializer.is_valid(raise_exception=True)
+        
+        validate_data = serializer.validated_data
+        
+        price = int(price)
+        
+        if user == nft.owner:
+            raise ValidationError("Нельзя поставить деньги на аукцион! Так как вы являетесь владелцом это нфт")
+        
+        if user is None:
+            raise ValidationError("Пользователь не аутентифицирован. Войдите в систему.")
+    
+        if user.balance < nft.price:
+            raise ValidationError("У вас недостаточно средств!")
+        
+        price_auction = NftAuction.objects.create(
+            user_id=user,
+            price=price,
+        )
+        nft.auction_prices.add(price_auction)
+        nft.save()
+        
+        user.balance -= price
+        return Response({'message': "Вы успешно поставили деньги на аукцион!"})
+        

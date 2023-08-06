@@ -1,6 +1,18 @@
 from rest_framework import serializers
 
-from apps.nft.models import Nft
+from apps.nft.models import Nft, NftAuction
+
+
+class AuctionSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = NftAuction
+        fields = (
+            'id',
+            'user_id',
+            'price',
+            'created_at',
+        )
 
 
 class NftLISTSerializer(serializers.ModelSerializer):
@@ -19,7 +31,8 @@ class NftLISTSerializer(serializers.ModelSerializer):
 
 class NftSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
-
+    auction_prices = AuctionSerializer(many=True, read_only=True)
+    
     class Meta:
         model = Nft
         fields = (
@@ -28,6 +41,7 @@ class NftSerializer(serializers.ModelSerializer):
             'image',
             'auction',
             'auction_end_date',
+            'auction_prices',
             'external_link',
             'description',
             'price',
@@ -36,12 +50,14 @@ class NftSerializer(serializers.ModelSerializer):
             'supply',
             'collection_id',
             'available',
+            'created_at',
             'owner',
             'author',
         )
         read_only_fields = (
             'owner',
             'author',
+            'auction_prices',
         )
     
     def create(self, validated_data):
@@ -79,3 +95,15 @@ class NFTCOllectionSerializer(serializers.ModelSerializer):
             'id',
             'image',
         )
+
+
+class AuctionPriceSerializer(serializers.ModelSerializer):
+    price = serializers.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        write_only=True,
+    )
+    
+    class Meta:
+        model = NftAuction
+        fields = ('price', )
